@@ -43,7 +43,7 @@ app.use("/api", adminComplaintRoues);
 
 // ✅ Serve frontend only AFTER all API routes
 const _dirname = path.dirname("");
-const buildPath = path.join(_dirname, "../frontend/build");
+const buildPath = path.join(__dirname, "../frontend/build");
 app.use(express.static(buildPath));
 
 app.get("/*", function (req, res) {
