@@ -8,7 +8,7 @@ dotenv.config();
 app.use(express.json());
 app.use(cors());
 
-// ✅ All API Routes should come first
+// Import all API routes
 const authRoutes = require("./routes/authRoutes");
 const dashboardRoutes = require("./routes/dashboardRoutes");
 const locationRoutes = require("./routes/locationRoutes");
@@ -23,8 +23,9 @@ const refillerpendingtaskRoutes = require("./routes/refillerpendingtaskRoutes");
 const refillernewtaskRoutes = require("./routes/refillernewtaskRoutes");
 const refillerComplaintRoutes = require("./routes/refillerComplaintRoutes");
 const clientComplaintRoutes = require("./routes/clientComplaintRoutes");
-const adminComplaintRoues = require("./routes/adminComplaintRoutes");
+const adminComplaintRoutes = require("./routes/adminComplaintRoutes"); // Fixed typo here
 
+// Use API routes
 app.use("/auth", authRoutes);
 app.use("/dashboard", dashboardRoutes);
 app.use("/api", locationRoutes);
@@ -39,25 +40,22 @@ app.use("/api", refillerpendingtaskRoutes);
 app.use("/api", refillernewtaskRoutes);
 app.use("/api", refillerComplaintRoutes);
 app.use("/api", clientComplaintRoutes);
-app.use("/api", adminComplaintRoues);
+app.use("/api", adminComplaintRoutes);  // Fixed typo here
 
-// ✅ Serve frontend only AFTER all API routes
-const _dirname = path.dirname("");
+// Serve React frontend static files
 const buildPath = path.join(__dirname, "../frontend/build");
 app.use(express.static(buildPath));
 
+// React catch-all handler for any request not handled by API routes
 app.get("/*", function (req, res) {
-  res.sendFile(
-    path.join(__dirname, "../frontend/build/index.html"),
-    function (err) {
-      if (err) {
-        res.status(500).send(err);
-      }
+  res.sendFile(path.join(buildPath, "index.html"), function (err) {
+    if (err) {
+      res.status(500).send(err);
     }
-  );
+  });
 });
 
-// ✅ Start server
+// Start server
 app.listen(5000, "0.0.0.0", () => {
   console.log("Server running on port 5000");
 });
